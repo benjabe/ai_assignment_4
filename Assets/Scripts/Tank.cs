@@ -66,7 +66,7 @@ public class Tank : MonoBehaviour
     {
         // Take the first tile in the path list and
         // get the direction to it from the current position.
-        Vector3 targetPosition = _path[0].Data.transform.position;
+        Vector3 targetPosition = _path[0].Data.NodeTransform.position;
         Vector3 distance = targetPosition - transform.position;
         Vector3 direction = distance.normalized;
         Vector3 toMove = direction * Time.deltaTime * _moveSpeed;
