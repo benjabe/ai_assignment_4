@@ -32,7 +32,7 @@ public class Tank : MonoBehaviour
     {
         _level = TileGraph.Instance;
         _currentTile = _level.NearestTile(transform.position);
-        Debug.Log(name + ": " + _currentTile.NodeTransform.position, this);
+        //Debug.Log(name + ": " + _currentTile.NodeTransform.position, this);
     }
 
     // Update is called once per frame
