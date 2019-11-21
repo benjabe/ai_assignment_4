@@ -15,5 +15,15 @@ public class PlayerInputManager : MonoBehaviour
             // Just reloads the current scene.
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        // Press C to toggle debug info.
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            InGameDebugger debugger = GetComponent<InGameDebugger>();
+            if (debugger != null)
+            {
+                debugger.SetActive(!debugger.IsActive);
+            }
+        }
     }
 }

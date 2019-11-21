@@ -40,7 +40,7 @@ public class GameTimer : MonoBehaviour
     void Update()
     {
         // Update the timer display
-        int totalSecondsRemaining = _maxGameTime - (int)Time.time;
+        int totalSecondsRemaining = _maxGameTime - (int)Time.timeSinceLevelLoad;
         int minutes = totalSecondsRemaining / 60;
         int seconds = totalSecondsRemaining - minutes * 60;
         _countdownText.text =
