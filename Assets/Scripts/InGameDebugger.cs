@@ -18,11 +18,26 @@ public class InGameDebugger : MonoBehaviour
     [SerializeField] private GameObject _lineRendererCameraGO = null;
 
     /// <summary>
+    /// The default colour of rendered lines.
+    /// </summary>
+    private Color _defaultLineColor = new Color(1.0f, 0.0f, 1.0f, 1.0f);
+
+    /// <summary>
+    /// Key: The edge that the line renderer belongs to
+    /// Value: The line renderer itself
+    /// </summary>
+    private Dictionary<Edge<Tile>, LineRenderer> _lineRenderers = null;
+
+    /// <summary>
     /// Whether the InGameDebugger is currently displaying debug info.
     /// </summary>
     /// <value></value>
     public bool IsActive { get; protected set; } = false;
 
+    private void Awake()
+    {
+        _lineRenderers = new Dictionary<Edge<Tile>, LineRenderer>();
+    }
 
     private void Start()
     {
@@ -43,10 +58,72 @@ public class InGameDebugger : MonoBehaviour
                     node.Data.NodeTransform.position,
                     edge.Node.Data.NodeTransform.position
                 });
+                // Set the colour
+                //Material whiteDiffuseMat
+                    //= new Material(Shader.Find("Unlit/Texture"));
+                //lineRenderer.material = whiteDiffuseMat;
+                lineRenderer.startColor = _defaultLineColor;
+                lineRenderer.endColor = _defaultLineColor;
+
+                // Add the line renderer to the dictionary
+                _lineRenderers[edge] = lineRenderer;
             }
         }
 
         SetActive(IsActive);
+    }
+
+    // Update is called every frame
+    private void Update()
+    {
+        if (IsActive)
+        {
+            ResetLineColors();
+            UpdateTankPathLines();
+        }
+    }
+
+    /// <summary>
+    /// Sets all line renderers to the default colour.
+    /// </summary>
+    private void ResetLineColors()
+    {
+        foreach(LineRenderer lineRenderer in _lineRenderers.Values)
+        {
+            lineRenderer.startColor = _defaultLineColor;
+            lineRenderer.endColor = _defaultLineColor;
+        }
+    }
+
+    /// <summary>
+    /// Updates linerenderer for every tank's current path.
+    /// </summary>
+    private void UpdateTankPathLines()
+    {
+        // Go through each tank and figure out which
+        // edges it's path goes through so we can
+        // change their colour
+        foreach (Tank tank in Tank.Tanks)
+        {
+            if (tank.Path != null)
+            {
+                // For each each node in the tank's path
+                foreach (Node<Tile> node in tank.Path)
+                {
+                    // Go through its edges
+                    foreach (Edge<Tile> edge in node.Edges)
+                    {
+                        // If the edge's node is also in the path
+                        if (tank.Path.Contains(edge.Node))
+                        {
+                            // Recolour the line to the tank's colour
+                            _lineRenderers[edge].startColor = tank.Color;
+                            _lineRenderers[edge].endColor = tank.Color;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
