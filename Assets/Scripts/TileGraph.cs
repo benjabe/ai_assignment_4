@@ -99,8 +99,15 @@ public class TileGraph : MonoBehaviour
     {
         if (Nodes.ContainsKey(start) && Nodes.ContainsKey(goal))
         {
-            List<Node<Tile>> nodeList
-                = AStar.ConstructPath(Nodes[start], Nodes[goal]);
+            List<Node<Tile>> nodeList = AStar.ConstructPath(
+                Nodes[start],
+                Nodes[goal],
+                (node) =>
+                {
+                    return (node.Data.NodeTransform.position -
+                            goal.NodeTransform.position).sqrMagnitude;
+                }
+            );
 
             if (nodeList != null)
             {

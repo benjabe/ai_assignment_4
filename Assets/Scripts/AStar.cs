@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class AStar
 {
-    public static List<Node<T>> ConstructPath<T>(Node<T> start, Node<T> goal)
+    //public delegate float HeuristicDelegate(Node<T> node1, Node<T> node2);
+    public static List<Node<T>> ConstructPath<T>(
+        Node<T> start, Node<T> goal, Func<Node<T>, float> heuristic)
     {
         if (start == goal)
         {
@@ -75,9 +78,9 @@ public class AStar
                 if (!gScore.ContainsKey(neighbor) ||
                     tentativeGScore < gScore[neighbor])
                 {
-                    cameFrom.Add(neighbor, current);
-                    gScore.Add(neighbor, tentativeGScore);
-                    fScore.Add(neighbor, gScore[neighbor] + 0);
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeGScore;
+                    fScore[neighbor] = gScore[neighbor] + heuristic(neighbor);
 
                     if (!openList.Contains(neighbor))
                     {
