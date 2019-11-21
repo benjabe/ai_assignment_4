@@ -45,11 +45,11 @@ public class Tank : MonoBehaviour
                 _currentTile,
                 _level.Tiles[Random.Range(0, _level.Tiles.Count)]
             );
-            Debug.Log(name + ": New path:", this);
+            /*Debug.Log(name + ": New path:", this);
             foreach (Node<Tile> node in _path)
             {
                 Debug.Log(node.Data.NodeTransform.position, this);
-            }
+            }*/
         }
 
         // If we have a path, move along it.
