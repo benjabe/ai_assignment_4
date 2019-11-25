@@ -41,9 +41,7 @@ public class InGameDebugger : MonoBehaviour
 
     private void Start()
     {
-        // Set up some line renderers 
-        List<Vector3> positions = new List<Vector3>();
-
+        // Set up some line renderers
         // Loop through each node in the level
         foreach (Node<Tile> node in TileGraph.Instance.Nodes.Values)
         {
@@ -58,14 +56,12 @@ public class InGameDebugger : MonoBehaviour
                     node.Data.NodeTransform.position,
                     edge.Node.Data.NodeTransform.position
                 });
+
                 // Set the colour
-                //Material whiteDiffuseMat
-                    //= new Material(Shader.Find("Unlit/Texture"));
-                //lineRenderer.material = whiteDiffuseMat;
                 lineRenderer.startColor = _defaultLineColor;
                 lineRenderer.endColor = _defaultLineColor;
 
-                // Add the line renderer to the dictionary
+                // Add the line renderer to the dictionary for future reference.
                 _lineRenderers[edge] = lineRenderer;
             }
         }

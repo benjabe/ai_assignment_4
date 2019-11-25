@@ -6,7 +6,7 @@ using UnityEngine;
 public class TileGraph : MonoBehaviour
 {
     /// <summary>
-    /// The sole instance of the class.
+    /// The instance of the class.
     /// </summary>
     /// <value></value>
     public static TileGraph Instance { get; private set; }
@@ -29,14 +29,7 @@ public class TileGraph : MonoBehaviour
     private void Awake()
     {
         // Set the singleton instance
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
 
         Tiles = new List<Tile>();
         // Loop through all the tiles. They should be the only children.

@@ -22,8 +22,18 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// The colour of the tank.
     /// </summary>
+    [Tooltip("The colour of the tank. This is used for drawing the " +
+             "the tank's path and has nothing to do with the colour " +
+             "of its meshes.")]
     [SerializeField] private Color _color = new Color(1.0f, 0.0f, 1.0f);
     public Color Color { get => _color; }
+
+    /// <summary>
+    /// Layers containing objects which block line of sight.
+    /// </summary>
+    [Tooltip("Layers containing objects which block line of sight. " +
+             "Basically should include any level elements.")]
+    [SerializeField] private LayerMask _lineOfSightBlockingMask = 0;
     
     /// <summary>
     /// The tile on which the tank currently sits.
@@ -39,6 +49,11 @@ public class Tank : MonoBehaviour
     /// The level in which the tank exists.
     /// </summary>
     private TileGraph _level = null;
+
+    /// <summary>
+    /// The tank this tank wants to kill.
+    /// </summary>
+    private Tank _target = null;
 
     private void Awake()
     {
@@ -63,17 +78,21 @@ public class Tank : MonoBehaviour
                 CurrentTile,
                 _level.Tiles[Random.Range(0, _level.Tiles.Count)]
             );
-            /*Debug.Log(name + ": New path:", this);
-            foreach (Node<Tile> node in Path)
-            {
-                Debug.Log(node.Data.NodeTransform.position, this);
-            }*/
         }
 
         // If we have a path, move along it.
         if (Path != null && Path.Count > 0)
         {
             MoveAlongPath();
+        }
+
+        // Get a tank in line of sight
+        _target = FindTankInLineOfSight();
+
+        if (_target != null)
+        {
+            // Found a target, shoot it.
+            Shoot();
         }
     }
 
@@ -104,5 +123,72 @@ public class Tank : MonoBehaviour
             // We're not overshooting, just move regularly
             transform.position += toMove;
         }
+    }
+
+    /// <summary>
+    /// Finds a tank in line of sight.
+    /// </summary>
+    /// <returns>The first tank found in line of sight.</returns>
+    private Tank FindTankInLineOfSight()
+    {
+        // Check all tanks that aren't this tank.
+        // Do a raycast, if it doesn't get blocked, the tank is in LOS.
+        foreach (Tank tank in Tanks)
+        {
+            if (tank != this)
+            {
+                // Check if there's anything blocking line of sight
+                RaycastHit hit;
+                Vector3 distance = tank.transform.position - transform.position;
+                Ray lineOfSightRay = new Ray(transform.position, distance);
+                Physics.Raycast(
+                    lineOfSightRay,
+                    out hit,
+                    _lineOfSightBlockingMask
+                );
+
+                if (hit.collider == null)
+                {
+                    // Draw a ray for visualisation
+                    Debug.DrawRay(
+                        transform.position,
+                        distance,
+                        Color.green
+                    );
+                    // Nothing blocks line of sight, return the tank.
+                    return tank;
+                }
+                else
+                {
+                    // The position of the collider
+                    Vector3 hitPosition = hit.collider.transform.position;
+                    // Something *did* block the line of sight
+                    // Draw a ray for visualisation
+                    // Draw a green line to the blocking collider
+                    Debug.DrawRay(
+                        transform.position,
+                        hitPosition - transform.position,
+                        Color.green
+                    );
+                    // Draw a red line the rest of the distance
+                    Debug.DrawRay(
+                        hitPosition,
+                        tank.transform.position - hitPosition,
+                        Color.red
+                    );
+                }
+            }
+        }
+
+        // No tanks in line of sight.
+        return null;
+    }
+
+    /// <summary>
+    /// Shoots a projectile.
+    /// </summary>
+    private void Shoot()
+    {
+        Debug.Log(name + " shoots " + _target.name, this);
     }
 }

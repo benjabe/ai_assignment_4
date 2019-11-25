@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5917530286811816197}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TankTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 5917530286811816199}
   - component: {fileID: 5917530286815240487}
   - component: {fileID: 5917530286814241767}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5917530288391723857}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TankBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 5917530288391723859}
   - component: {fileID: 5917530288388332403}
   - component: {fileID: 5917530288389429683}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5917530288495418039}
   - component: {fileID: 114410749641045652}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,6 +263,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 1
+  _color: {r: 1, g: 0, b: 1, a: 1}
+  _lineOfSightBlockingMask:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!1 &5917530288625387593
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,7 +278,7 @@ GameObject:
   - component: {fileID: 5917530288625685609}
   - component: {fileID: 5917530288624391241}
   - component: {fileID: 5917530288623392393}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -349,7 +353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5917530288625685611}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TankBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}

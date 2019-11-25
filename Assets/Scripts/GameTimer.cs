@@ -34,6 +34,7 @@ public class GameTimer : MonoBehaviour
                 this
             );
         }
+        Time.timeScale = 1.0f;
     }
 
     // Update is called once per frame
@@ -46,5 +47,11 @@ public class GameTimer : MonoBehaviour
         _countdownText.text =
             ((minutes < 10) ? "0" : "") + minutes + ":" +
             ((seconds < 10) ? "0" : "") + seconds;
+
+        // Stop the game if we've reached zero
+        if (totalSecondsRemaining <= 0)
+        {
+            Time.timeScale = 0.0f;
+        }
     }
 }
