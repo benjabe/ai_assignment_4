@@ -32,8 +32,14 @@ public class Tank : MonoBehaviour
     /// Layers containing objects which block line of sight.
     /// </summary>
     [Tooltip("Layers containing objects which block line of sight. " +
-             "Basically should include any level elements.")]
+             "Basically should include any level elements. " +
+             "including tanks of course.")]
     [SerializeField] private LayerMask _lineOfSightBlockingMask = 0;
+
+    /// <summary>
+    /// The transform on which line of sight calculations are based.
+    /// </summary>
+    [SerializeField] private Transform _lineOfSightTransform = null;
     
     /// <summary>
     /// The tile on which the tank currently sits.
@@ -97,6 +103,14 @@ public class Tank : MonoBehaviour
     }
 
     /// <summary>
+    /// Called when the gameobject is destroyed.
+    /// </summary>
+    private void OnDestroy()
+    {
+        Tanks.Remove(this);
+    }
+
+    /// <summary>
     /// Moves the tank along the current path.
     /// </summary>
     private void MoveAlongPath()
@@ -139,43 +153,57 @@ public class Tank : MonoBehaviour
             {
                 // Check if there's anything blocking line of sight
                 RaycastHit hit;
-                Vector3 distance = tank.transform.position - transform.position;
-                Ray lineOfSightRay = new Ray(transform.position, distance);
+
+                Vector3 distance =
+                    tank._lineOfSightTransform.position -
+                    _lineOfSightTransform.position;
+
+                Ray lineOfSightRay = new Ray(
+                    _lineOfSightTransform.position,
+                    distance
+                );
+
                 Physics.Raycast(
                     lineOfSightRay,
                     out hit,
                     _lineOfSightBlockingMask
                 );
 
-                if (hit.collider == null)
+                if (hit.collider != null)
                 {
-                    // Draw a ray for visualisation
-                    Debug.DrawRay(
-                        transform.position,
-                        distance,
-                        Color.green
-                    );
-                    // Nothing blocks line of sight, return the tank.
-                    return tank;
-                }
-                else
-                {
-                    // The position of the collider
-                    Vector3 hitPosition = hit.collider.transform.position;
-                    // Something *did* block the line of sight
-                    // Draw a ray for visualisation
-                    // Draw a green line to the blocking collider
-                    Debug.DrawRay(
-                        transform.position,
-                        hitPosition - transform.position,
-                        Color.green
-                    );
-                    // Draw a red line the rest of the distance
-                    Debug.DrawRay(
-                        hitPosition,
-                        tank.transform.position - hitPosition,
-                        Color.red
-                    );
+                    // We hit something
+                    if (hit.collider.gameObject.GetComponent<Tank>() == tank)
+                    {
+                        // We hit the tank
+                        // Draw a ray for visualisation
+                        Debug.DrawRay(
+                            _lineOfSightTransform.position,
+                            distance,
+                            Color.green
+                        );
+                        return tank;
+                    }
+                    else
+                    {
+                        // We hit something else
+
+                        // The position of the collider
+                        Vector3 hitPosition = hit.collider.transform.position;
+
+                        // Draw a ray for visualisation
+                        // Draw a green line to the blocking collider
+                        Debug.DrawRay(
+                            _lineOfSightTransform.position,
+                            hitPosition - _lineOfSightTransform.position,
+                            Color.green
+                        );
+                        // Draw a red line the rest of the distance
+                        Debug.DrawRay(
+                            hitPosition,
+                            tank._lineOfSightTransform.position - hitPosition,
+                            Color.red
+                        );
+                    }
                 }
             }
         }
