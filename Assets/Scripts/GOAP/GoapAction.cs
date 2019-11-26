@@ -22,27 +22,27 @@ public abstract class GoapAction : MonoBehaviour {
         effects = new HashSet<KeyValuePair<string, object>> ();
     }
  
-    public void doReset() {
+    public void DoReset() {
         inRange = false;
         target = null;
-        reset ();
+        Reset ();
     }
  
     /**
      * Reset any variables that need to be reset before planning happens again.
      */
-    public abstract void reset();
+    public abstract void Reset();
  
     /**
      * Is the action done?
      */
-    public abstract bool isDone();
+    public abstract bool IsDone();
  
     /**
      * Procedurally check if this action can run. Not all actions
      * will need this, but some might.
      */
-    public abstract bool checkProceduralPrecondition(GameObject agent);
+    public abstract bool CheckProceduralPrecondition(GameObject agent);
  
     /**
      * Run the action.
@@ -50,34 +50,34 @@ public abstract class GoapAction : MonoBehaviour {
      * if something happened and it can no longer perform. In this case
      * the action queue should clear out and the goal cannot be reached.
      */
-    public abstract bool perform(GameObject agent);
+    public abstract bool Perform(GameObject agent);
  
     /**
      * Does this action need to be within range of a target game object?
      * If not then the moveTo state will not need to run for this action.
      */
-    public abstract bool requiresInRange ();
+    public abstract bool RequiresInRange ();
      
  
     /**
      * Are we in range of the target?
      * The MoveTo state will set this and it gets reset each time this action is performed.
      */
-    public bool isInRange () {
+    public bool IsInRange () {
         return inRange;
     }
      
-    public void setInRange(bool inRange) {
+    public void SetInRange(bool inRange) {
         this.inRange = inRange;
     }
  
  
-    public void addPrecondition(string key, object value) {
+    public void AddPrecondition(string key, object value) {
         preconditions.Add (new KeyValuePair<string, object>(key, value) );
     }
  
  
-    public void removePrecondition(string key) {
+    public void RemovePrecondition(string key) {
         KeyValuePair<string, object> remove = default(KeyValuePair<string,object>);
         foreach (KeyValuePair<string, object> kvp in preconditions) {
             if (kvp.Key.Equals (key))
@@ -88,12 +88,12 @@ public abstract class GoapAction : MonoBehaviour {
     }
  
  
-    public void addEffect(string key, object value) {
+    public void AddEffect(string key, object value) {
         effects.Add (new KeyValuePair<string, object>(key, value) );
     }
  
  
-    public void removeEffect(string key) {
+    public void RemoveEffect(string key) {
         KeyValuePair<string, object> remove = default(KeyValuePair<string,object>);
         foreach (KeyValuePair<string, object> kvp in effects) {
             if (kvp.Key.Equals (key))
