@@ -1,3 +1,4 @@
+/*
 public class ExampleAction : GoapAction {
     private bool mined = false;
     private IronRockComponent targetRock; // where we get the ore from
@@ -78,3 +79,4 @@ public class ExampleAction : GoapAction {
     }
      
 }
+*/

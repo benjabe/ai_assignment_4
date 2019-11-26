@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using UnityEngine;
+
 public abstract class GoapAction : MonoBehaviour {
  
     private HashSet<KeyValuePair<string,object>> preconditions;
