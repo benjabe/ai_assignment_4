@@ -76,8 +76,6 @@ public class Tank : MonoBehaviour
             faceMovingDirection();
             MoveAlongPath();
         }
-
-        aimAtOpponent();
     }
 
     /// <summary>
@@ -148,5 +146,36 @@ public class Tank : MonoBehaviour
     
         turret.transform.rotation = rotation;
         barrel.transform.rotation = rotation;
+    }
+
+    private void turnTurret()
+    {
+        GameObject turret = this.transform.GetChild(1).gameObject;
+        GameObject barrel = this.transform.GetChild(2).gameObject;
+
+        Quaternion turretRotation = turret.transform.rotation;
+        Quaternion barrelRotation = barrel.transform.rotation;
+        turretRotation.y += 1;
+        barrelRotation.y += 1;
+
+        turret.transform.rotation = turretRotation;
+        barrel.transform.rotation = barrelRotation;
+    }
+
+
+    private bool hasLineOfSight()
+    {
+        /**
+        // Get opponent object
+        Tank opponent = (Tanks[0] == this) ? Tanks[1] : Tanks[0];
+        // Make cone that essentially is tanks "area of vision"
+        // TODO - Cone can't be fetched
+        GameObject cone = this.transform.GetChild(1).transform.GetChild(1).gameObject;
+        // Get objects' colliders
+        Collider coneCollider = cone.GetComponent<Collider>();
+        Collider opponentCollider = opponent.GetComponent<Collider>();
+        // Return whether or not they are colliding
+        return coneCollider.bounds.Intersects(opponentCollider.bounds);
+        *//
     }
 }
