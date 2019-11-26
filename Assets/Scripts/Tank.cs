@@ -89,6 +89,7 @@ public class Tank : MonoBehaviour
         // If we have a path, move along it.
         if (Path != null && Path.Count > 0)
         {
+            faceMovingDirection();
             MoveAlongPath();
         }
 
@@ -140,6 +141,60 @@ public class Tank : MonoBehaviour
     }
 
     /// <summary>
+    /// Rotates the tank in the direction it is facing
+    /// </summary>
+    private void faceMovingDirection()
+    {
+        // Gets the tanks relative position through using the target and its own position
+        Vector3 targetPosition = Path[0].Data.NodeTransform.position;
+        Vector3 relativePosition = targetPosition - transform.position;
+
+        // Get tank body
+        GameObject body = this.transform.GetChild(0).gameObject;
+
+        // Sets the tanks rotation relative to the direction on the target
+        Quaternion rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
+        transform.rotation = rotation;
+    }
+
+    /// <summary>
+    /// Rotates the tank turret and barrel towards its opponent
+    /// </summary>
+    private void aimAtOpponent()
+    {
+        // Get turrent and barrel
+        // TODO - Bytte ut hardkodede index-verdier med noe som GetChild("turret") e.l.?
+        GameObject turret = this.transform.GetChild(1).gameObject;
+        GameObject barrel = this.transform.GetChild(2).gameObject;
+
+        // Get opponent tank
+        Tank opponent = (Tanks[0] == this) ? Tanks[1] : Tanks[0];
+
+        // Get this tanks position relative to opponent
+        Vector3 targetPosition = opponent.transform.position;
+        Vector3 relativePosition = targetPosition - transform.position;
+        
+        // Sets the turret/barrel rotation relative to the direction on the opponent
+        Quaternion rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
+    
+        turret.transform.rotation = rotation;
+        barrel.transform.rotation = rotation;
+    }
+
+    private void turnTurret()
+    {
+        GameObject turret = this.transform.GetChild(1).gameObject;
+        GameObject barrel = this.transform.GetChild(2).gameObject;
+
+        Quaternion turretRotation = turret.transform.rotation;
+        Quaternion barrelRotation = barrel.transform.rotation;
+        turretRotation.y += 1;
+        barrelRotation.y += 1;
+
+        turret.transform.rotation = turretRotation;
+        barrel.transform.rotation = barrelRotation;
+    }
+
     /// Finds a tank in line of sight.
     /// </summary>
     /// <returns>The first tank found in line of sight.</returns>
