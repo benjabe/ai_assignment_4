@@ -17,9 +17,9 @@ public class Tank : MonoBehaviour
     /// The tanks turret and barrel
     /// </summary>
     GameObject turret;
+
     GameObject barrel;
-
-
+    
     /// <summary>
     /// The amount of units the tank can move in one second.
     /// </summary>
@@ -76,13 +76,11 @@ public class Tank : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        turret = this.transform.GetChild(1).gameObject;
-        barrel = this.transform.GetChild(2).gameObject;
+        turret = transform.GetChild(1).gameObject;
+        barrel = transform.GetChild(2).gameObject;
 
-        shootCooldown = 0;
         _level = TileGraph.Instance;
         CurrentTile = _level.NearestTile(transform.position);
-        //Debug.Log(name + ": " + _currentTile.NodeTransform.position, this);
     }
 
     // Update is called once per frame
@@ -184,8 +182,8 @@ public class Tank : MonoBehaviour
         // Sets the turret/barrel rotation relative to the direction on the opponent
         Quaternion rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
     
-        turret.transform.rotation = rotation;
-        barrel.transform.rotation = rotation;
+        turret.transform.rotation = Quaternion.Lerp(turret.transform.rotation, rotation, 0.01f);
+        barrel.transform.rotation = Quaternion.Lerp(barrel.transform.rotation, rotation, 0.01f);
     }
 
     private void TurnTurret()
