@@ -278,18 +278,11 @@ public class Tank : MonoBehaviour
     /// Shoots a projectile.
     /// </summary>
     private void Shoot()
-    {   
-        if(shootCooldown <= 0)
+    {
+        var turret = GetComponentInChildren<Turret>();
+        if(turret.Shoot())
         {
-            Quaternion barrelRotation = barrel.transform.rotation;
-            Instantiate(bulletPrefab, transform.position, barrelRotation);
             Debug.Log(name + " shoots " + _target.name, this);
-            shootCooldown = 100;
         }
-        else
-        {
-            shootCooldown -= Time.deltaTime * 100;
-        }
-        
     }
 }

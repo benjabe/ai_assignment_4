@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Magazine : MonoBehaviour
 {
-    // Ammo type used by this Turret
-    [SerializeField] private Ammo _ammoType = new Ammo(2f, 33);
-
     // Max number of shells in magazine
     [SerializeField] private int _capacity = 20;
 
@@ -22,7 +19,7 @@ public class Magazine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _shellsLeft = _capacity;
+        _shellsLeft = 0;
     }
 
     // Returns true if the magazine has bullets
@@ -53,6 +50,8 @@ public class Magazine : MonoBehaviour
     // Reload the magazine is a coroutine function that sets reloading and fills up the magazine while waiting for reload time
     public IEnumerator Reload()
     {
+        Debug.Log("Magazine is reloading");
+
         // Set up reload state
         _isReloading = true;
 
@@ -65,6 +64,8 @@ public class Magazine : MonoBehaviour
         // Reset and clean up state
         _shellsLeft = _capacity;
         _isReloading = false;
+
+        Debug.Log("Reload completed.");
         yield break;
     }
 }
