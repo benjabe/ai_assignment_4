@@ -50,7 +50,7 @@ public class Magazine : MonoBehaviour
     // Reload the magazine is a coroutine function that sets reloading and fills up the magazine while waiting for reload time
     public IEnumerator Reload()
     {
-        Debug.Log("Magazine is reloading");
+        Debug.Log("Magazine is reloading..");
 
         // Set up reload state
         _isReloading = true;

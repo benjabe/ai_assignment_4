@@ -10,9 +10,11 @@ public class Projectile : MonoBehaviour
     // Speed of projectile
     public float Speed = 0f;
 
+    public Vector3 Direction;
+
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(transform.forward * Speed * Time.deltaTime);
+        transform.Translate(transform.forward * Speed * Time.deltaTime * 0.1f);
     }
 }

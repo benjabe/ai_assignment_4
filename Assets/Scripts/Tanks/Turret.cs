@@ -46,12 +46,13 @@ public class Turret : MonoBehaviour
         if(couldShoot)
         {
             _timeUntilCanShoot = _fireRate;
-            var bullet = Instantiate(ProjectileObject, ProjectileSpawnPoint.transform);
+            var bullet = Instantiate(ProjectileObject, ProjectileSpawnPoint.transform.position, TurretMesh.transform.rotation);           
             var projectile = bullet.GetComponent<Projectile>();
 
             // Set projectile properties based on Turret Stats
             projectile.Damage = _damage;
             projectile.Speed = _projectileSpeed;
+            projectile.Direction = ProjectileSpawnPoint.transform.forward;
         }
         // If we are empty, but not reloading, start reload
         else if(!_magazine.IsReloading())

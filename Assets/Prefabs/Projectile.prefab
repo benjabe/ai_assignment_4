@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8009971800946310367}
   - component: {fileID: 8009971800946310364}
-  m_Layer: 0
+  - component: {fileID: 1495858048005863087}
+  m_Layer: 12
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,6 +47,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 0
   Speed: 0
+  Direction: {x: 0, y: 0, z: 0}
+--- !u!136 &1495858048005863087
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8009971800946310365}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.03
+  m_Height: 0.1
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8009971801311750644
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +73,7 @@ GameObject:
   - component: {fileID: 8009971801311750647}
   - component: {fileID: 8009971801311750649}
   - component: {fileID: 8009971801311750646}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
