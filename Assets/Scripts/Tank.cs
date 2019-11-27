@@ -16,10 +16,9 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// The tanks turret and barrel
     /// </summary>
-    GameObject turret;
+    public GameObject TurretPart;
+    public GameObject BodyPart;
 
-    GameObject barrel;
-    
     /// <summary>
     /// The amount of units the tank can move in one second.
     /// </summary>
@@ -76,9 +75,6 @@ public class Tank : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        turret = transform.GetChild(1).gameObject;
-        barrel = transform.GetChild(2).gameObject;
-
         _level = TileGraph.Instance;
         CurrentTile = _level.NearestTile(transform.position);
     }
@@ -159,12 +155,9 @@ public class Tank : MonoBehaviour
         Vector3 targetPosition = Path[0].Data.NodeTransform.position;
         Vector3 relativePosition = targetPosition - transform.position;
 
-        // Get tank body
-        GameObject body = this.transform.GetChild(0).gameObject;
-
         // Sets the tanks rotation relative to the direction on the target by lerping
         Quaternion targetRotation = Quaternion.LookRotation(relativePosition, Vector3.up);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.04f);
+        BodyPart.transform.rotation = Quaternion.Lerp(BodyPart.transform.rotation, targetRotation, 0.04f);
     }
 
     /// <summary>
@@ -182,19 +175,7 @@ public class Tank : MonoBehaviour
         // Sets the turret/barrel rotation relative to the direction on the opponent
         Quaternion rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
     
-        turret.transform.rotation = Quaternion.Lerp(turret.transform.rotation, rotation, 0.01f);
-        barrel.transform.rotation = Quaternion.Lerp(barrel.transform.rotation, rotation, 0.01f);
-    }
-
-    private void TurnTurret()
-    {
-        Quaternion turretRotation = turret.transform.rotation;
-        Quaternion barrelRotation = barrel.transform.rotation;
-        turretRotation.y += 1;
-        barrelRotation.y += 1;
-
-        turret.transform.rotation = turretRotation;
-        barrel.transform.rotation = barrelRotation;
+        TurretPart.transform.rotation = Quaternion.Lerp(TurretPart.transform.rotation, rotation, 0.01f);
     }
 
     /// Finds a tank in line of sight.
@@ -275,7 +256,7 @@ public class Tank : MonoBehaviour
     private void Shoot()
     {
         var turret = GetComponentInChildren<Turret>();
-        if(turret.Shoot())
+        if(turret.Shoot(_target.gameObject))
         {
             Debug.Log(name + " shoots " + _target.name, this);
         }

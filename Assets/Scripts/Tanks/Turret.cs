@@ -33,7 +33,7 @@ public class Turret : MonoBehaviour
         _timeUntilCanShoot -= Time.deltaTime;
     }
 
-    public bool Shoot()
+    public bool Shoot(GameObject target)
     {
         // Can not shoot if we are on fire rate cool down
         if (_timeUntilCanShoot > 0f)
@@ -46,13 +46,14 @@ public class Turret : MonoBehaviour
         if(couldShoot)
         {
             _timeUntilCanShoot = _fireRate;
-            var bullet = Instantiate(ProjectileObject, ProjectileSpawnPoint.transform.position, TurretMesh.transform.rotation);           
+            var bullet = Instantiate(ProjectileObject, ProjectileSpawnPoint.transform.position, transform.rotation);
             var projectile = bullet.GetComponent<Projectile>();
 
             // Set projectile properties based on Turret Stats
             projectile.Damage = _damage;
             projectile.Speed = _projectileSpeed;
-            projectile.Direction = ProjectileSpawnPoint.transform.forward;
+            projectile.Direction = (target.transform.position - transform.position).normalized;
+
         }
         // If we are empty, but not reloading, start reload
         else if(!_magazine.IsReloading())
