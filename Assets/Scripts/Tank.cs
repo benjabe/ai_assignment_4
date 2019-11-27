@@ -13,6 +13,16 @@ public class Tank : MonoBehaviour
     /// <value></value>
     public static List<Tank> Tanks { get; protected set; } = new List<Tank>();
 
+    public GameObject bulletPrefab;
+    float shootCooldown;
+
+    /// <summary>
+    /// The tanks turret and barrel
+    /// </summary>
+    GameObject turret;
+    GameObject barrel;
+
+
     /// <summary>
     /// The amount of units the tank can move in one second.
     /// </summary>
@@ -69,6 +79,10 @@ public class Tank : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        turret = this.transform.GetChild(1).gameObject;
+        barrel = this.transform.GetChild(2).gameObject;
+
+        shootCooldown = 0;
         _level = TileGraph.Instance;
         CurrentTile = _level.NearestTile(transform.position);
         //Debug.Log(name + ": " + _currentTile.NodeTransform.position, this);
@@ -163,11 +177,6 @@ public class Tank : MonoBehaviour
     /// </summary>
     private void aimAtOpponent()
     {
-        // Get turrent and barrel
-        // TODO - Bytte ut hardkodede index-verdier med noe som GetChild("turret") e.l.?
-        GameObject turret = this.transform.GetChild(1).gameObject;
-        GameObject barrel = this.transform.GetChild(2).gameObject;
-
         // Get opponent tank
         Tank opponent = (Tanks[0] == this) ? Tanks[1] : Tanks[0];
 
@@ -184,9 +193,6 @@ public class Tank : MonoBehaviour
 
     private void turnTurret()
     {
-        GameObject turret = this.transform.GetChild(1).gameObject;
-        GameObject barrel = this.transform.GetChild(2).gameObject;
-
         Quaternion turretRotation = turret.transform.rotation;
         Quaternion barrelRotation = barrel.transform.rotation;
         turretRotation.y += 1;
@@ -272,7 +278,18 @@ public class Tank : MonoBehaviour
     /// Shoots a projectile.
     /// </summary>
     private void Shoot()
-    {
-        Debug.Log(name + " shoots " + _target.name, this);
+    {   
+        if(shootCooldown <= 0)
+        {
+            Quaternion barrelRotation = barrel.transform.rotation;
+            Instantiate(bulletPrefab, transform.position, barrelRotation);
+            Debug.Log(name + " shoots " + _target.name, this);
+            shootCooldown = 100;
+        }
+        else
+        {
+            shootCooldown -= Time.deltaTime * 100;
+        }
+        
     }
 }

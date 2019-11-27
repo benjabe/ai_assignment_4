@@ -294,6 +294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e20dfc695403f5ae6b967a019eac6cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 6676820245644468993, guid: 85eedb181504d44b0921ae9de0f0467f,
+    type: 3}
   _moveSpeed: 1
   _color: {r: 1, g: 0, b: 1, a: 1}
   _lineOfSightBlockingMask:
