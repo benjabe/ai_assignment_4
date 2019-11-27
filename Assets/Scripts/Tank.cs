@@ -13,9 +13,6 @@ public class Tank : MonoBehaviour
     /// <value></value>
     public static List<Tank> Tanks { get; protected set; } = new List<Tank>();
 
-    public GameObject bulletPrefab;
-    float shootCooldown;
-
     /// <summary>
     /// The tanks turret and barrel
     /// </summary>
@@ -113,7 +110,7 @@ public class Tank : MonoBehaviour
         if (_target != null)
         {
             // Found a target, shoot it.
-            aimAtOpponent();
+            AimAtOpponent();
             Shoot();
         }
     }
