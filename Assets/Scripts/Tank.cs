@@ -103,7 +103,7 @@ public class Tank : MonoBehaviour
         // If we have a path, move along it.
         if (Path != null && Path.Count > 0)
         {
-            faceMovingDirection();
+            FaceMovingDirection();
             MoveAlongPath();
         }
 
@@ -158,7 +158,7 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// Rotates the tank in the direction it is facing
     /// </summary>
-    private void faceMovingDirection()
+    private void FaceMovingDirection()
     {
         // Gets the tanks relative position through using the target and its own position
         Vector3 targetPosition = Path[0].Data.NodeTransform.position;
@@ -167,15 +167,15 @@ public class Tank : MonoBehaviour
         // Get tank body
         GameObject body = this.transform.GetChild(0).gameObject;
 
-        // Sets the tanks rotation relative to the direction on the target
-        Quaternion rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
-        transform.rotation = rotation;
+        // Sets the tanks rotation relative to the direction on the target by lerping
+        Quaternion targetRotation = Quaternion.LookRotation(relativePosition, Vector3.up);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.04f);
     }
 
     /// <summary>
     /// Rotates the tank turret and barrel towards its opponent
     /// </summary>
-    private void aimAtOpponent()
+    private void AimAtOpponent()
     {
         // Get opponent tank
         Tank opponent = (Tanks[0] == this) ? Tanks[1] : Tanks[0];
@@ -191,7 +191,7 @@ public class Tank : MonoBehaviour
         barrel.transform.rotation = rotation;
     }
 
-    private void turnTurret()
+    private void TurnTurret()
     {
         Quaternion turretRotation = turret.transform.rotation;
         Quaternion barrelRotation = barrel.transform.rotation;
