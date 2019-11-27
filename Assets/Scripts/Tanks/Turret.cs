@@ -13,11 +13,20 @@ public class Turret : MonoBehaviour
     // Damage per shot
     [SerializeField] private int _damage = 25;
 
+    // Speed of projectile
+    [SerializeField] private float _projectileSpeed = 0.01f;
+
     // Time until we can shoot again
     private float _timeUntilCanShoot = 0f;
 
     // Game object of turret
     public GameObject TurretMesh;
+
+    // Spawn point of projectile
+    public GameObject ProjectileSpawnPoint;
+
+    // The projectile game object that should be spawned
+    public GameObject ProjectileObject;
 
     void Update()
     {
@@ -37,7 +46,12 @@ public class Turret : MonoBehaviour
         if(couldShoot)
         {
             _timeUntilCanShoot = _fireRate;
-            // TODO: Spawn some bullet and fire it
+            var bullet = Instantiate(ProjectileObject, ProjectileSpawnPoint.transform);
+            var projectile = bullet.GetComponent<Projectile>();
+
+            // Set projectile properties based on Turret Stats
+            projectile.Damage = _damage;
+            projectile.Speed = _projectileSpeed;
         }
         // If we are empty, but not reloading, start reload
         else if(!_magazine.IsReloading())

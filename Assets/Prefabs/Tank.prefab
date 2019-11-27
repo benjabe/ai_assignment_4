@@ -61,6 +61,7 @@ Transform:
   m_Children:
   - {fileID: 5241386853160393708}
   - {fileID: 5917530286811816199}
+  - {fileID: 4392730664254350064}
   m_Father: {fileID: 5917530288495418039}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -77,7 +78,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _magazine: {fileID: 904537724116635468}
+  _fireRate: 1.25
+  _damage: 25
+  _projectileSpeed: 100
   TurretMesh: {fileID: 3113817589730335052}
+  ProjectileSpawnPoint: {fileID: 6101116284248093993}
+  ProjectileObject: {fileID: 8009971800946310365, guid: 5506815b5a7102c44881abb0a63ee394,
+    type: 3}
 --- !u!114 &904537724116635468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +428,36 @@ Transform:
   - {fileID: 5917530288625685609}
   m_Father: {fileID: 5917530288495418039}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6101116284248093993
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4392730664254350064}
+  m_Layer: 0
+  m_Name: ProjectileSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4392730664254350064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6101116284248093993}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0008, y: 0.33, z: 0.578}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4372062142584321929}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9171210113629545822
 GameObject:
