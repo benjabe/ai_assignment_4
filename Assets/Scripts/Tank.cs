@@ -99,6 +99,7 @@ public class Tank : MonoBehaviour
         if (_target != null)
         {
             // Found a target, shoot it.
+            aimAtOpponent();
             Shoot();
         }
     }
