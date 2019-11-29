@@ -119,7 +119,7 @@ public class Tank : MonoBehaviour, IGoap {
     /// <summary>
     /// Moves the tank along the current path.
     /// </summary>
-    private void MoveAlongPath()
+    public void MoveAlongPath()
     {
         // Take the first tile in the path list and
         // get the direction to it from the current position.
@@ -148,7 +148,7 @@ public class Tank : MonoBehaviour, IGoap {
     /// <summary>
     /// Rotates the tank in the direction it is facing
     /// </summary>
-    private void FaceMovingDirection()
+    public void FaceMovingDirection()
     {
         // Gets the tanks relative position through using the target and its own position
         Vector3 targetPosition = Path[0].Data.NodeTransform.position;
@@ -162,7 +162,7 @@ public class Tank : MonoBehaviour, IGoap {
     /// <summary>
     /// Rotates the tank turret and barrel towards its opponent
     /// </summary>
-    private void AimAtOpponent()
+    public void AimAtOpponent()
     {
         // Get opponent tank
         Tank opponent = (Tanks[0] == this) ? Tanks[1] : Tanks[0];
@@ -180,7 +180,7 @@ public class Tank : MonoBehaviour, IGoap {
     /// Finds a tank in line of sight.
     /// </summary>
     /// <returns>The first tank found in line of sight.</returns>
-    private Tank FindTankInLineOfSight()
+    public Tank FindTankInLineOfSight()
     {
         // Check all tanks that aren't this tank.
         // Do a raycast, if it doesn't get blocked, the tank is in LOS.
@@ -252,7 +252,7 @@ public class Tank : MonoBehaviour, IGoap {
     /// <summary>
     /// Shoots a projectile.
     /// </summary>
-    private void Shoot()
+    public void Shoot()
     {
         var turret = GetComponentInChildren<Turret>();
         if(turret.Shoot(_target.gameObject))
