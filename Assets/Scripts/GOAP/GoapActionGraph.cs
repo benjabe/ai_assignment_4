@@ -208,7 +208,6 @@ public class GoapActionGraph
                     }
                     currentCameFrom = cameFrom[currentCameFrom];
                 }
-
                 foreach (var condition in conditions)
                 {
                     Debug.Log(condition.Key + " " + condition.Value);
