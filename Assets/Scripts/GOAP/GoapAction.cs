@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Code from: https://github.com/sploreg/goap/blob/master/Assets/Standard%20Assets/Scripts/AI/GOAP/GoapAction.cs
+
 public abstract class GoapAction : MonoBehaviour {
  
     private HashSet<KeyValuePair<string,object>> preconditions;

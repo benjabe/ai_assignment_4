@@ -5,8 +5,7 @@ using UnityEngine;
 /// <summary>
 /// A tank.
 /// </summary>
-public class Tank : MonoBehaviour
-{
+public class Tank : MonoBehaviour, IGoap {
     /// <summary>
     /// A list of all the tanks in the game.
     /// </summary>
@@ -260,5 +259,33 @@ public class Tank : MonoBehaviour
         {
             Debug.Log(name + " shoots " + _target.name, this);
         }
+    }
+
+    public HashSet<KeyValuePair<string, object>> getWorldState() {
+        throw new System.NotImplementedException();
+    }
+
+    public HashSet<KeyValuePair<string, object>> createGoalState() {
+        throw new System.NotImplementedException();
+    }
+
+    public void planFailed(HashSet<KeyValuePair<string, object>> failedGoal) {
+        throw new System.NotImplementedException();
+    }
+
+    public void planFound(HashSet<KeyValuePair<string, object>> goal, Queue<GoapAction> actions) {
+        throw new System.NotImplementedException();
+    }
+
+    public void actionsFinished() {
+        throw new System.NotImplementedException();
+    }
+
+    public void planAborted(GoapAction aborter) {
+        throw new System.NotImplementedException();
+    }
+
+    public bool moveAgent(GoapAction nextAction) {
+        throw new System.NotImplementedException();
     }
 }
