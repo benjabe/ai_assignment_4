@@ -11,11 +11,11 @@ public abstract class GoapAction : MonoBehaviour {
     /* The cost of performing the action.
      * Figure out a weight that suits the action.
      * Changing it will affect what actions are chosen during planning.*/
-    public float cost = 1f;
+    public float Cost = 1f;
  
     /**
      * An action often has to perform on an object. This is that object. Can be null. */
-    public GameObject target;
+    public GameObject Target;
  
     public GoapAction() {
         preconditions = new HashSet<KeyValuePair<string, object>> ();
@@ -24,7 +24,7 @@ public abstract class GoapAction : MonoBehaviour {
  
     public void DoReset() {
         inRange = false;
-        target = null;
+        Target = null;
         Reset ();
     }
  

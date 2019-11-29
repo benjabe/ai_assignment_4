@@ -49,35 +49,65 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// The current path to where the tank wants to be.
     /// </summary>
-    public List<Node<Tile>> Path {get; protected set; }= null;
+    public List<Node<Tile>> Path = null;
+
+    /// <summary>
+    /// The current plan of what to do.
+    /// </summary>
+    private List<Node<GoapAction>> _plan = null;
+
+    /// <summary>
+    /// A graph of GoapActions. Generated on Awake.
+    /// </summary>
+    private GoapActionGraph _goapActionGraph = null;
 
     /// <summary>
     /// The level in which the tank exists.
     /// </summary>
-    private TileGraph _level = null;
+    public TileGraph Level = null;
 
     /// <summary>
     /// The tank this tank wants to kill.
     /// </summary>
-    private Tank _target = null;
+    [HideInInspector] public Tank Target = null;
+
+    /// <summary>
+    /// Dictionary of the current conditions of the tank.
+    /// </summary>
+    public Dictionary<string, object> Conditions;
+
 
     private void Awake()
     {
         Tanks.Add(this);
+
+        // Set up our initial conditions
+        Conditions = new Dictionary<string, object>()
+        {
+            { "hasAmmo", true },
+            { "hasTarget", false }
+        };
+
+        // Generate our goap action graph.
+        _goapActionGraph = new GoapActionGraph(GetComponents<GoapAction>());
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        _level = TileGraph.Instance;
-        CurrentTile = _level.NearestTile(transform.position);
+        Level = TileGraph.Instance;
+        CurrentTile = Level.NearestTile(transform.position);
         //Debug.Log(name + ": " + _currentTile.NodeTransform.position, this);
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Generic "roam and do nothing behaviour"
+        // Replacing this with Goap Planning
+        // Keeping for historical reasons
         // Find a path if we don't have one.
+        /*
         if (Path == null || Path.Count <= 0)
         {
             Path = _level.ConstructPath(
@@ -101,6 +131,51 @@ public class Tank : MonoBehaviour
             // Found a target, shoot it.
             Shoot();
         }
+        */
+
+        // Do Goap Planning
+        if (_plan == null)
+        {
+            // 1. Choose a goal
+            // Default is to kill enemy
+            var goal = new KeyValuePair<string, object>("targetIsDead", true);
+            // If health is low the goal should be to survive
+
+            // 2. Get a plan for how to execute the goal
+            // If we get null this means no plan was possible
+            // to achieve the goal or the planner failed
+            Debug.Log(name + " - New plan:");
+            _plan = _goapActionGraph.CreatePlan(Conditions, goal);
+            
+            if (_plan != null)
+            {
+                foreach (var node in _plan)
+                {
+                    Debug.Log("\t" + node.Data.GetType().Name);
+                }
+            }
+        }
+        // Execute plan
+        if (_plan != null)
+        {
+            bool success = _plan[0].Data.Perform(gameObject);
+            // If executing the plan fails we scrap the plan.
+            if (!success)
+            {
+                Debug.Log(name + " failed to execute " +
+                    _plan[0].Data.GetType().Name);
+                _plan = null;
+            }
+            else if (_plan[0].Data.IsDone())
+            {
+                _plan[0].Data.DoReset();
+                _plan.RemoveAt(0);
+                if (_plan.Count == 0)
+                {
+                    _plan = null;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -114,7 +189,7 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// Moves the tank along the current path.
     /// </summary>
-    private void MoveAlongPath()
+    public void MoveAlongPath()
     {
         // Take the first tile in the path list and
         // get the direction to it from the current position.
@@ -198,7 +273,7 @@ public class Tank : MonoBehaviour
     /// Finds a tank in line of sight.
     /// </summary>
     /// <returns>The first tank found in line of sight.</returns>
-    private Tank FindTankInLineOfSight()
+    public Tank FindTankInLineOfSight()
     {
         // Check all tanks that aren't this tank.
         // Do a raycast, if it doesn't get blocked, the tank is in LOS.
@@ -231,13 +306,16 @@ public class Tank : MonoBehaviour
                     {
                         // We hit the tank
                         // Draw a ray for visualisation
+                        /*
                         Debug.DrawRay(
                             _lineOfSightTransform.position,
                             distance,
                             Color.green
                         );
+                        */
                         return tank;
                     }
+                    /*
                     else
                     {
                         // We hit something else
@@ -259,19 +337,12 @@ public class Tank : MonoBehaviour
                             Color.red
                         );
                     }
+                    */
                 }
             }
         }
 
         // No tanks in line of sight.
         return null;
-    }
-
-    /// <summary>
-    /// Shoots a projectile.
-    /// </summary>
-    private void Shoot()
-    {
-        Debug.Log(name + " shoots " + _target.name, this);
     }
 }
