@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System;
 
 // Code from: https://github.com/sploreg/goap/blob/master/Assets/Standard%20Assets/Scripts/AI/GOAP/GoapAgent.cs
-public sealed class GoapAgent : MonoBehaviour {
+public sealed class GoapAgent : MonoBehaviour 
+{
 
     private FSM stateMachine;
 
@@ -20,7 +21,8 @@ public sealed class GoapAgent : MonoBehaviour {
     private GoapPlanner planner;
 
 
-    void Start() {
+    void Start() 
+    {
         stateMachine = new FSM();
         availableActions = new HashSet<GoapAction>();
         currentActions = new Queue<GoapAction>();
@@ -34,33 +36,43 @@ public sealed class GoapAgent : MonoBehaviour {
     }
 
 
-    void Update() {
+    void Update() 
+    {
         stateMachine.Update(this.gameObject);
     }
 
 
-    public void AddAction(GoapAction a) {
+    public void AddAction(GoapAction a) 
+    {
         availableActions.Add(a);
     }
 
-    public GoapAction GetAction(Type action) {
-        foreach (GoapAction g in availableActions) {
-            if (g.GetType().Equals(action))
+    public GoapAction GetAction(Type action) 
+    {
+        foreach (GoapAction g in availableActions) 
+        {
+            if (g.GetType().Equals(action)) 
+            {
                 return g;
+            }
         }
         return null;
     }
 
-    public void RemoveAction(GoapAction action) {
+    public void RemoveAction(GoapAction action) 
+    {
         availableActions.Remove(action);
     }
 
-    private bool HasActionPlan() {
+    private bool HasActionPlan() 
+    {
         return currentActions.Count > 0;
     }
 
-    private void CreateIdleState() {
-        idleState = (fsm, gameObj) => {
+    private void CreateIdleState() 
+    {
+        idleState = (fsm, gameObj) => 
+        {
             // GOAP planning
 
             // get the world state and the goal we want to plan for
@@ -69,7 +81,8 @@ public sealed class GoapAgent : MonoBehaviour {
 
             // Plan
             Queue<GoapAction> plan = planner.Plan(gameObject, availableActions, worldState, goal);
-            if (plan != null) {
+            if (plan != null) 
+            {
                 // we have a plan, hooray!
                 currentActions = plan;
                 dataProvider.PlanFound(goal, plan);
@@ -77,7 +90,8 @@ public sealed class GoapAgent : MonoBehaviour {
                 fsm.PopState(); // move to PerformAction state
                 fsm.PushState(performActionState);
 
-            } else {
+            } else 
+            {
                 // ugh, we couldn't get a plan
                 Debug.Log("<color=orange>Failed Plan:</color>" + PrettyPrint(goal));
                 dataProvider.PlanFailed(goal);
@@ -88,12 +102,15 @@ public sealed class GoapAgent : MonoBehaviour {
         };
     }
 
-    private void CreateMoveToState() {
-        moveToState = (fsm, gameObj) => {
+    private void CreateMoveToState() 
+    {
+        moveToState = (fsm, gameObj) => 
+        {
             // move the game object
 
             GoapAction action = currentActions.Peek();
-            if (action.RequiresInRange() && action.target == null) {
+            if (action.RequiresInRange() && action.target == null) 
+            {
                 Debug.Log("<color=red>Fatal error:</color> Action requires a target but has none. Planning failed. You did not assign the target in your Action.checkProceduralPrecondition()");
                 fsm.PopState(); // move
                 fsm.PopState(); // perform
@@ -102,7 +119,8 @@ public sealed class GoapAgent : MonoBehaviour {
             }
 
             // get the agent to move itself
-            if (dataProvider.MoveAgent(action)) {
+            if (dataProvider.MoveAgent(action)) 
+            {
                 fsm.PopState();
             }
 
@@ -124,12 +142,14 @@ public sealed class GoapAgent : MonoBehaviour {
         };
     }
 
-    private void CreatePerformActionState() {
-
-        performActionState = (fsm, gameObj) => {
+    private void CreatePerformActionState() 
+    {
+        performActionState = (fsm, gameObj) => 
+        {
             // perform the action
 
-            if (!HasActionPlan()) {
+            if (!HasActionPlan()) 
+            {
                 // no actions to perform
                 Debug.Log("<color=red>Done actions</color>");
                 fsm.PopState();
@@ -139,88 +159,109 @@ public sealed class GoapAgent : MonoBehaviour {
             }
 
             GoapAction action = currentActions.Peek();
-            if (action.IsDone()) {
+            if (action.IsDone()) 
+            {
                 // the action is done. Remove it so we can perform the next one
                 currentActions.Dequeue();
             }
 
-            if (HasActionPlan()) {
+            if (HasActionPlan()) 
+            {
                 // perform the next action
                 action = currentActions.Peek();
                 bool inRange = action.RequiresInRange() ? action.IsInRange() : true;
 
-                if (inRange) {
+                if (inRange) 
+                {
                     // we are in range, so perform the action
                     bool success = action.Perform(gameObj);
 
-                    if (!success) {
+                    if (!success) 
+                    {
                         // action failed, we need to plan again
                         fsm.PopState();
                         fsm.PushState(idleState);
                         dataProvider.PlanAborted(action);
                     }
-                } else {
+                } else 
+                {
                     // we need to move there first
                     // push moveTo state
                     fsm.PushState(moveToState);
                 }
 
-            } else {
+            } else 
+            {
                 // no actions left, move to Plan state
                 fsm.PopState();
                 fsm.PushState(idleState);
                 dataProvider.ActionsFinished();
             }
-
         };
     }
 
-    private void FindDataProvider() {
-        foreach (Component comp in gameObject.GetComponents(typeof(Component))) {
-            if (typeof(IGoap).IsAssignableFrom(comp.GetType())) {
+    private void FindDataProvider() 
+    {
+        foreach (Component comp in gameObject.GetComponents(typeof(Component))) 
+        {
+            if (typeof(IGoap).IsAssignableFrom(comp.GetType())) 
+            {
                 dataProvider = (IGoap)comp;
                 return;
             }
         }
     }
 
-    private void LoadActions() {
+    private void LoadActions() 
+    {
         GoapAction[] actions = gameObject.GetComponents<GoapAction>();
-        foreach (GoapAction a in actions) {
+        foreach (GoapAction a in actions) 
+        {
             availableActions.Add(a);
         }
+
         Debug.Log("Found actions: " + PrettyPrint(actions));
     }
 
-    public static string PrettyPrint(HashSet<KeyValuePair<string, object>> state) {
+    public static string PrettyPrint(HashSet<KeyValuePair<string, object>> state) 
+    {
         String s = "";
-        foreach (KeyValuePair<string, object> kvp in state) {
+        foreach (KeyValuePair<string, object> kvp in state) 
+        {
             s += kvp.Key + ":" + kvp.Value.ToString();
             s += ", ";
         }
+
         return s;
     }
 
-    public static string PrettyPrint(Queue<GoapAction> actions) {
+    public static string PrettyPrint(Queue<GoapAction> actions) 
+    {
         String s = "";
-        foreach (GoapAction a in actions) {
+        foreach (GoapAction a in actions) 
+        {
             s += a.GetType().Name;
             s += "-> ";
         }
+
         s += "GOAL";
         return s;
     }
 
-    public static string PrettyPrint(GoapAction[] actions) {
+    public static string PrettyPrint(GoapAction[] actions) 
+    {
         String s = "";
-        foreach (GoapAction a in actions) {
+        foreach (GoapAction a in actions) 
+        {
             s += a.GetType().Name;
             s += ", ";
         }
+
         return s;
     }
 
-    public static string PrettyPrint(GoapAction action) {
+    public static string PrettyPrint(GoapAction action) 
+    {
         String s = "" + action.GetType().Name;
         return s;
     }

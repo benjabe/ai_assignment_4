@@ -18,7 +18,8 @@ using System.Collections.Generic;
  * It also provides an interface for the planner to give 
  * feedback to the Agent and report success/failure.
  */
-public interface IGoap {
+public interface IGoap 
+{
     /**
 	 * The starting state of the Agent and the world.
 	 * Supply what states are needed for actions to run.

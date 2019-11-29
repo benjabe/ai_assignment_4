@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootAction : GoapAction {
+public class ShootAction : GoapAction 
+{
     private bool inRange = false;
 
     private float startTime = 0;
@@ -21,7 +22,8 @@ public class ShootAction : GoapAction {
         
     }
 
-    public ShootAction() {
+    public ShootAction() 
+    {
         AddPrecondition("hasAmmo", true);
         AddPrecondition("inRange", true);
         AddPrecondition("mustReload", false);
@@ -29,25 +31,30 @@ public class ShootAction : GoapAction {
     }
 
     // We need to be in range (have vision) of the enemy tank in order to shoot
-    public override bool RequiresInRange() {
+    public override bool RequiresInRange() 
+    {
         return true;
     }
 
 
-    public override void Reset() {
+    public override void Reset() 
+    {
         inRange = false;
         startTime = 0;
     }
 
-    public override bool IsDone() {
+    public override bool IsDone() 
+    {
         throw new System.NotImplementedException();
     }
 
-    public override bool CheckProceduralPrecondition(GameObject agent) {
+    public override bool CheckProceduralPrecondition(GameObject agent) 
+    {
         throw new System.NotImplementedException();
     }
 
-    public override bool Perform(GameObject agent) {
+    public override bool Perform(GameObject agent) 
+    {
         throw new System.NotImplementedException();
     }
 }

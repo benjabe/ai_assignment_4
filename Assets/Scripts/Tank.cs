@@ -261,31 +261,57 @@ public class Tank : MonoBehaviour, IGoap {
         }
     }
 
-    public void ActionsFinished() {
-        throw new System.NotImplementedException();
+    public void ActionsFinished() 
+    {
+        Debug.Log("<color=blue>Actions Completed</color>");
     }
 
-    public void PlanAborted(GoapAction aborter) {
-        throw new System.NotImplementedException();
+    public void PlanAborted(GoapAction aborter) 
+    {
+        Debug.Log("<color=red>Plan Aborted</color> " + GoapAgent.PrettyPrint(aborter));
     }
 
-    public bool MoveAgent(GoapAction nextAction) {
-        throw new System.NotImplementedException();
+    public bool MoveAgent(GoapAction nextAction) 
+    {
+        MoveAlongPath();
+
+        if (gameObject.transform.position.Equals(nextAction.target.transform.position)) 
+        {
+            nextAction.SetInRange(true);
+            return true;
+        }
+
+        return false;
     }
 
-    public HashSet<KeyValuePair<string, object>> GetWorldState() {
-        throw new System.NotImplementedException();
+    public HashSet<KeyValuePair<string, object>> GetWorldState() 
+    {
+        HashSet<KeyValuePair<string, object>> worldData = new HashSet<KeyValuePair<string, object>> 
+        {
+            // TODO: Add more variables, figure out ammo cap etc
+            new KeyValuePair<string, object>("hasAmmo", 1)
+        };
+
+        return worldData;
     }
 
-    public HashSet<KeyValuePair<string, object>> CreateGoalState() {
-        throw new System.NotImplementedException();
+    public HashSet<KeyValuePair<string, object>> CreateGoalState() 
+    {
+        HashSet<KeyValuePair<string, object>> goal = new HashSet<KeyValuePair<string, object>> 
+        {
+            new KeyValuePair<string, object>("opponentShot", true)
+        };
+
+        return goal;
     }
 
-    public void PlanFailed(HashSet<KeyValuePair<string, object>> failedGoal) {
-        throw new System.NotImplementedException();
+    public void PlanFailed(HashSet<KeyValuePair<string, object>> failedGoal) 
+    {
+        Debug.Log("<color=red>Plan Failed</color> " + GoapAgent.PrettyPrint(failedGoal));
     }
 
-    public void PlanFound(HashSet<KeyValuePair<string, object>> goal, Queue<GoapAction> actions) {
-        throw new System.NotImplementedException();
+    public void PlanFound(HashSet<KeyValuePair<string, object>> goal, Queue<GoapAction> actions) 
+    {
+        Debug.Log("<color=green>Plan Found</color> " + GoapAgent.PrettyPrint(actions));
     }
 }
