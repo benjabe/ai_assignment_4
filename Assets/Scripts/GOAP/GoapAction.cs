@@ -80,7 +80,7 @@ public abstract class GoapAction : MonoBehaviour {
  
  
     public void RemovePrecondition(string key) {
-        KeyValuePair<string, object> remove = default(KeyValuePair<string,object>);
+        KeyValuePair<string, object> remove = default;
         foreach (KeyValuePair<string, object> kvp in preconditions) {
             if (kvp.Key.Equals (key))
                 remove = kvp;
@@ -96,7 +96,7 @@ public abstract class GoapAction : MonoBehaviour {
  
  
     public void RemoveEffect(string key) {
-        KeyValuePair<string, object> remove = default(KeyValuePair<string,object>);
+        KeyValuePair<string, object> remove = default;
         foreach (KeyValuePair<string, object> kvp in effects) {
             if (kvp.Key.Equals (key))
                 remove = kvp;

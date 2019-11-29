@@ -37,7 +37,7 @@ public class GoapPlanner {
 
         // build graph
         Node start = new Node(null, 0, worldState, null);
-        bool success = buildGraph(start, leaves, usableActions, goal);
+        bool success = BuildGraph(start, leaves, usableActions, goal);
 
         if (!success) {
             // oh no, we didn't get a plan
@@ -89,14 +89,14 @@ public class GoapPlanner {
         foreach (GoapAction action in usableActions) {
 
             // if the parent state has the conditions for this action's preconditions, we can use it here
-            if (inState(action.Preconditions, parent.state)) {
+            if (InState(action.Preconditions, parent.state)) {
 
                 // apply the action's effects to the parent state
-                HashSet<KeyValuePair<string, object>> currentState = populateState(parent.state, action.Effects);
+                HashSet<KeyValuePair<string, object>> currentState = PopulateState(parent.state, action.Effects);
                 //Debug.Log(GoapAgent.prettyPrint(currentState));
                 Node node = new Node(parent, parent.runningCost + action.cost, currentState, action);
 
-                if (inState(goal, currentState)) {
+                if (InState(goal, currentState)) {
                     // we found a solution!
                     leaves.Add(node);
                     foundOne = true;
@@ -129,7 +129,7 @@ public class GoapPlanner {
 	 * Check that all items in 'test' are in 'state'. If just one does not match or is not there
 	 * then this returns false.
 	 */
-    private bool inState(HashSet<KeyValuePair<string, object>> test, HashSet<KeyValuePair<string, object>> state) {
+    private bool InState(HashSet<KeyValuePair<string, object>> test, HashSet<KeyValuePair<string, object>> state) {
         bool allMatch = true;
         foreach (KeyValuePair<string, object> t in test) {
             bool match = false;
@@ -148,7 +148,7 @@ public class GoapPlanner {
     /**
 	 * Apply the stateChange to the currentState
 	 */
-    private HashSet<KeyValuePair<string, object>> populateState(HashSet<KeyValuePair<string, object>> currentState, HashSet<KeyValuePair<string, object>> stateChange) {
+    private HashSet<KeyValuePair<string, object>> PopulateState(HashSet<KeyValuePair<string, object>> currentState, HashSet<KeyValuePair<string, object>> stateChange) {
         HashSet<KeyValuePair<string, object>> state = new HashSet<KeyValuePair<string, object>>();
         // copy the KVPs over as new objects
         foreach (KeyValuePair<string, object> s in currentState) {

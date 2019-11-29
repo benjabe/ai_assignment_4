@@ -261,31 +261,31 @@ public class Tank : MonoBehaviour, IGoap {
         }
     }
 
-    public HashSet<KeyValuePair<string, object>> getWorldState() {
+    public void ActionsFinished() {
         throw new System.NotImplementedException();
     }
 
-    public HashSet<KeyValuePair<string, object>> createGoalState() {
+    public void PlanAborted(GoapAction aborter) {
         throw new System.NotImplementedException();
     }
 
-    public void planFailed(HashSet<KeyValuePair<string, object>> failedGoal) {
+    public bool MoveAgent(GoapAction nextAction) {
         throw new System.NotImplementedException();
     }
 
-    public void planFound(HashSet<KeyValuePair<string, object>> goal, Queue<GoapAction> actions) {
+    public HashSet<KeyValuePair<string, object>> GetWorldState() {
         throw new System.NotImplementedException();
     }
 
-    public void actionsFinished() {
+    public HashSet<KeyValuePair<string, object>> CreateGoalState() {
         throw new System.NotImplementedException();
     }
 
-    public void planAborted(GoapAction aborter) {
+    public void PlanFailed(HashSet<KeyValuePair<string, object>> failedGoal) {
         throw new System.NotImplementedException();
     }
 
-    public bool moveAgent(GoapAction nextAction) {
+    public void PlanFound(HashSet<KeyValuePair<string, object>> goal, Queue<GoapAction> actions) {
         throw new System.NotImplementedException();
     }
 }
