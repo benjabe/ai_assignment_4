@@ -3,6 +3,8 @@ using UnityEngine;
 
 public static class GoapPlanner
 {
+    private static bool _debugEnabled = false;
+
     /// <summary>
     /// Creates an action plan based on a set of inital conditions
     /// and available actions
@@ -110,25 +112,27 @@ public static class GoapPlanner
         // Go through each action and see if it can be used
         foreach (GoapAction action in usableActions)
         {
-            // Check if the action us usable given the parent's state
-            /*
-            if (parent.Action != null)
+            if (_debugEnabled)
             {
-                Debug.Log(parent.Action.GetType().Name);
+                // Check if the action us usable given the parent's state
+                if (parent.Action != null)
+                {
+                    Debug.Log(parent.Action.GetType().Name);
+                }
+                else
+                {
+                    Debug.Log("No parent action.");
+                }
+                Debug.Log("\t->" + action.GetType().Name);
             }
-            else
-            {
-                Debug.Log("No parent action.");
-            }
-            */
-            //Debug.Log("\t->" + action.GetType().Name);
             bool canUseAction = true;
             foreach (var precondition in action.Preconditions)
             {
-                /*
-                Debug.Log("\t\t" + precondition.Key + " must be " +
-                          precondition.Value);
-                          */
+                if (_debugEnabled)
+                {
+                    Debug.Log("\t\t" + precondition.Key + " must be " +
+                            precondition.Value);
+                }
                 if (parent.State.ContainsKey(precondition.Key))
                 {
                     object parentValue = parent.State[precondition.Key];
@@ -136,19 +140,28 @@ public static class GoapPlanner
                     {
                         canUseAction = false;
                     }
-                    /*
-                    Debug.Log("\t\t" + precondition.Key +
-                              " was " + parentValue);
-                              */
+                    if (_debugEnabled)
+                    {
+                        Debug.Log("\t\t" + precondition.Key +
+                                " was " + parentValue);
+                    }
                 }
                 else
                 {
-                    //Debug.Log("\t\t" + precondition.Key + " was not present.");
+                    if (_debugEnabled)
+                    {
+                        Debug.Log(
+                            "\t\t" + precondition.Key + " was not present."
+                        );
+                    }
                     canUseAction = false;
                 }
             }
 
-            //Debug.Log("\t\tCan use " + canUseAction);
+            if (_debugEnabled)
+            {
+                Debug.Log("\t\tCan use " + canUseAction);
+            }
 
             if (canUseAction)
             {
@@ -162,10 +175,11 @@ public static class GoapPlanner
                 foreach (var effect in action.Effects)
                 {
                     currentState[effect.Key] = effect.Value;
-                    /*
-                    Debug.Log("\t\tEffect: " + effect.Key + " " +
-                              currentState[effect.Key]);
-                              */
+                    if (_debugEnabled)
+                    {
+                        Debug.Log("\t\tEffect: " + effect.Key + " " +
+                                currentState[effect.Key]);
+                    }
                 }
 
                 GoapNode node = new GoapNode(
@@ -193,40 +207,51 @@ public static class GoapPlanner
 
                 if (isDone)
                 {
-                    //Debug.Log("--------- Done! ---------");
+                    if (_debugEnabled)
+                    {
+                        Debug.Log("--------- Done! ---------");
+                    }
                     leaves.Add(node);
                     success = true;
                 }
                 else
                 {
                     var subsetActions = new HashSet<GoapAction>();
-                    //Debug.Log("\t\t\tSubset actions");
+                    if (_debugEnabled)
+                    {
+                        Debug.Log("\t\t\tSubset actions");
+                    }
                     foreach (var subsetAction in usableActions)
                     {
                         if (subsetAction != action)
                         {
                             subsetActions.Add(subsetAction);
-                            /*
-                            Debug.Log("\t\t\t\tAdded " +
-                                      subsetAction.GetType().Name);
-                                      */
+                            if (_debugEnabled)
+                            {
+                                Debug.Log("\t\t\t\tAdded " +
+                                        subsetAction.GetType().Name);
+                            }
                         }
                     }
-                    /*
-                    foreach (var subsetAction in subsetActions)
+                    if (_debugEnabled)
                     {
-                        Debug.Log("\t\t\t\tContains " +
-                            subsetAction.GetType().Name);
+                        foreach (var subsetAction in subsetActions)
+                        {
+                            Debug.Log("\t\t\t\tContains " +
+                                subsetAction.GetType().Name);
+                        }
+                        Debug.Log("\t\t\tCreate subset");
                     }
-                    */
-                    //Debug.Log("\t\t\tCreate subset");
                     bool subsetSuccess = CreatePlanningTree(
                         node,
                         leaves,
                         subsetActions,
                         goalState
                     );
-                    //Debug.Log("\t\t\t\t\t\t" + subsetSuccess);
+                    if (_debugEnabled)
+                    {
+                        Debug.Log("\t\t\t\t\t\t" + subsetSuccess);
+                    }
                     if (subsetSuccess)
                     {
                         success = true;

@@ -59,6 +59,7 @@ public class FindTargetAction : GoapAction
         {
             // Target in sight
             tank.Target = target;
+            tank.Conditions["hasTarget"] = true;
             _isDone = true;
         }
         else

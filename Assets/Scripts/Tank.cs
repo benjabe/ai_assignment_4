@@ -173,6 +173,10 @@ public class Tank : MonoBehaviour
             {
                 Debug.Log(name + " failed to execute " +
                     _plan[0].GetType().Name);
+                foreach (var key in Conditions.Keys)
+                {
+                    Debug.Log("\t" + key + " " + Conditions[key]);
+                }
                 _plan = null;
             }
             else if (_plan[0].IsDone())
@@ -217,6 +221,10 @@ public class Tank : MonoBehaviour
             // remove it from the current path.
             CurrentTile = Path[0].Data;
             Path.RemoveAt(0);
+            if (Path.Count == 0)
+            {
+                Path = null;
+            }
         }
         else
         {
@@ -336,7 +344,7 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// Shoots a projectile.
     /// </summary>
-    private void Shoot()
+    public void Shoot()
     {
         var turret = GetComponentInChildren<Turret>();
         if(turret.Shoot(Target.gameObject))
