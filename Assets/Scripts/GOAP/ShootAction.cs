@@ -73,7 +73,8 @@ public class ShootAction : GoapAction
     {
         // This assumes that the barrel is aimed towards the target
         Tank tank = agent.GetComponent<Tank>();
-        if ((bool)tank.Conditions["hasAmmo"] == true)
+        if ((bool)tank.Conditions["hasAmmo"] == true &&
+            (bool)tank.Conditions["hasTarget"] == true)
         {
             // Fire a projectile! Hopefully it will hit the enemy.
             // Regardless, we have to spend our ammo.
@@ -82,12 +83,15 @@ public class ShootAction : GoapAction
             // Instantiate the shell prefab at the instantiation point
             // then remove the parent to avoid weird stuff if the parent
             // gets destroyed
+            /*
             GameObject shellObject = Instantiate(
                 _shellPrefab,
                 _shellInstantiationPoint,
                 false
             );
             shellObject.transform.parent = null;
+            */
+            tank.Shoot();
             _isDone = true;
             return true;
         }

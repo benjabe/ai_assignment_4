@@ -9,6 +9,11 @@ public class PickUpAmmoAction : GoapAction
     /// </summary>
     private bool _isDone = false;
 
+    /// <summary>
+    /// Whether we've created a path to a ShellPickup.
+    /// </summary>
+    private bool _createdPath = false;
+
     public PickUpAmmoAction()
     {
         // It doesn't make senes to pick up ammo when we already have it!
@@ -23,7 +28,8 @@ public class PickUpAmmoAction : GoapAction
      */
     public override void Reset()
     {
-
+        _isDone = false;
+        _createdPath = false;
     }
  
     /**
@@ -51,9 +57,45 @@ public class PickUpAmmoAction : GoapAction
      */
     public override bool Perform(GameObject agent)
     {
-        agent.GetComponent<Tank>().Conditions["hasAmmo"] = true;
-        _isDone = true;
-        return true;
+        Tank tank = agent.GetComponent<Tank>();
+
+        if ((bool)tank.Conditions["hasAmmo"] == false)
+        {
+            ShellPickup[] pickups = FindObjectsOfType<ShellPickup>();
+            if (pickups.Length > 0)
+            {
+                if (!_createdPath)
+                {
+                    tank.Path = tank.Level.ConstructPath(
+                        tank.CurrentTile,
+                        pickups[0].Tile
+                    );
+                }
+                if (tank.Path != null)
+                {
+                    _createdPath = true;
+                    // Tank has a path, move along it
+                    tank.MoveAlongPath();
+                    if (tank.Path == null)
+                    {
+                        // Arrived at destination, pick up ammo.
+                        tank.Conditions["hasAmmo"] = true;
+                        _isDone = true;
+                        Destroy(pickups[0].gameObject);
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            // Agent already has ammo.
+            return false;
+        }
     }
  
     /**
