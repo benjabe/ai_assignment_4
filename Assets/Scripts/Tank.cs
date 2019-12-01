@@ -242,19 +242,16 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// Rotates the tank turret and barrel towards its opponent
     /// </summary>
-    private void AimAtOpponent()
+    private void AimAtOpponent(Tank opponent)
     {
-        // Get opponent tank
-        Tank opponent = (Tanks[0] == this) ? Tanks[1] : Tanks[0];
-
         // Get this tanks position relative to opponent
         Vector3 targetPosition = opponent.transform.position;
         Vector3 relativePosition = targetPosition - transform.position;
         
         // Sets the turret/barrel rotation relative to the direction on the opponent
         Quaternion rotation = Quaternion.LookRotation(relativePosition, Vector3.up);
-    
-        TurretPart.transform.rotation = Quaternion.Lerp(TurretPart.transform.rotation, rotation, 0.01f);
+        // Slowly turns the turret
+        TurretPart.transform.rotation = Quaternion.Lerp(TurretPart.transform.rotation, rotation, 0.05f);
     }
 
     /// Finds a tank in line of sight.
@@ -300,6 +297,7 @@ public class Tank : MonoBehaviour
                             Color.green
                         );
                         */
+                        AimAtOpponent(tank);
                         return tank;
                     }
                     /*
