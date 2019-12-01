@@ -60,12 +60,7 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// The current plan of what to do.
     /// </summary>
-    private List<Node<GoapAction>> _plan = null;
-
-    /// <summary>
-    /// A graph of GoapActions. Generated on Awake.
-    /// </summary>
-    private GoapActionGraph _goapActionGraph = null;
+    private List<GoapAction> _plan = null;
 
     /// <summary>
     /// The level in which the tank exists.
@@ -82,6 +77,11 @@ public class Tank : MonoBehaviour
     /// </summary>
     public Dictionary<string, object> Conditions;
 
+    /// <summary>
+    /// An array of all the actions this agent can perform.
+    /// </summary>
+    private GoapAction[] _actions;
+
 
     private void Awake()
     {
@@ -94,8 +94,7 @@ public class Tank : MonoBehaviour
             { "hasTarget", false }
         };
 
-        // Generate our goap action graph.
-        _goapActionGraph = new GoapActionGraph(GetComponents<GoapAction>());
+        _actions = GetComponents<GoapAction>();
     }
 
     // Start is called before the first frame update
@@ -145,37 +144,41 @@ public class Tank : MonoBehaviour
         {
             // 1. Choose a goal
             // Default is to kill enemy
-            var goal = new KeyValuePair<string, object>("targetIsDead", true);
+            var goal = new Dictionary<string, object>()
+            {
+                { "targetIsDead", true }
+            };
             // If health is low the goal should be to survive
 
             // 2. Get a plan for how to execute the goal
             // If we get null this means no plan was possible
             // to achieve the goal or the planner failed
             Debug.Log(name + " - New plan:");
-            _plan = _goapActionGraph.CreatePlan(Conditions, goal);
+            _plan = GoapPlanner.CreatePlan(Conditions, goal, _actions);
             
             if (_plan != null)
             {
-                foreach (var node in _plan)
+                foreach (var action in _plan)
                 {
-                    Debug.Log("\t" + node.Data.GetType().Name);
+                    Debug.Log("\t" + action.GetType().Name);
                 }
             }
         }
         // Execute plan
         if (_plan != null)
         {
-            bool success = _plan[0].Data.Perform(gameObject);
+            bool success = _plan[0].Perform(gameObject);
             // If executing the plan fails we scrap the plan.
             if (!success)
             {
                 Debug.Log(name + " failed to execute " +
-                    _plan[0].Data.GetType().Name);
+                    _plan[0].GetType().Name);
                 _plan = null;
             }
-            else if (_plan[0].Data.IsDone())
+            else if (_plan[0].IsDone())
             {
-                _plan[0].Data.DoReset();
+                Debug.Log(name + " executed " + _plan[0].GetType().Name);
+                _plan[0].DoReset();
                 _plan.RemoveAt(0);
                 if (_plan.Count == 0)
                 {
