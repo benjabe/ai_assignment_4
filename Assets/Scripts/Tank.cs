@@ -190,6 +190,10 @@ public class Tank : MonoBehaviour
                 }
             }
         }
+        if((bool)Conditions["hasTarget"] == true)
+        {
+            AimAtOpponent();
+        }
     }
 
     /// <summary>
@@ -211,6 +215,7 @@ public class Tank : MonoBehaviour
         Vector3 distance = targetPosition - transform.position;
         Vector3 direction = distance.normalized;
         Vector3 toMove = direction * Time.deltaTime * _moveSpeed;
+        FaceMovingDirection();
 
         // Check if we are overshooting/moving further than we need
         if (toMove.sqrMagnitude >= distance.sqrMagnitude)
@@ -236,7 +241,7 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// Rotates the tank in the direction it is facing
     /// </summary>
-    private void FaceMovingDirection()
+    public void FaceMovingDirection()
     {
         // Gets the tanks relative position through using the target and its own position
         Vector3 targetPosition = Path[0].Data.NodeTransform.position;
@@ -250,8 +255,9 @@ public class Tank : MonoBehaviour
     /// <summary>
     /// Rotates the tank turret and barrel towards its opponent
     /// </summary>
-    private void AimAtOpponent(Tank opponent)
+    public void AimAtOpponent()
     {
+        Tank opponent = (Tanks[0] == this) ? Tanks[1] : Tanks[0];
         // Get this tanks position relative to opponent
         Vector3 targetPosition = opponent.transform.position;
         Vector3 relativePosition = targetPosition - transform.position;
@@ -305,7 +311,7 @@ public class Tank : MonoBehaviour
                             Color.green
                         );
                         */
-                        AimAtOpponent(tank);
+                        AimAtOpponent();
                         return tank;
                     }
                     /*
