@@ -81,7 +81,8 @@ public class PickUpAmmoAction : GoapAction
                         // Arrived at destination, pick up ammo.
                         tank.Conditions["hasAmmo"] = true;
                         _isDone = true;
-                        Destroy(pickups[0].gameObject);
+                        // Moves the ammo pickup to a new destination
+                        pickups[0].SetNewPosition();
                     }
                 }
                 return true;

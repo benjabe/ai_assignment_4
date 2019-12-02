@@ -8,6 +8,15 @@ public class ShellPickup : MonoBehaviour
 
     private void Start()
     {
+        SetNewPosition();
+    }
+
+
+    /// <summary>
+    /// Moves the ammo-pickup to a new location, called when the pickup gets obtained, and on initialization.
+    /// 
+    /// </summary>
+    public void SetNewPosition() {
         Tile = TileGraph.Instance.Tiles[
             Random.Range(0, TileGraph.Instance.Tiles.Count)
         ];
